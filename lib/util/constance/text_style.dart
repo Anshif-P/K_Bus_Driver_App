@@ -24,6 +24,10 @@ class AppText {
         fontSize: 16,
         color: AppColor.secondaryColor,
       );
+  static TextStyle get defautTitleDark => const TextStyle(
+        fontSize: 19,
+        color: AppColor.secondaryColor,
+      );
 
   static TextStyle get mediumLight => const TextStyle(
         fontSize: 16,

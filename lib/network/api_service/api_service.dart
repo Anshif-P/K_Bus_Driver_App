@@ -9,7 +9,7 @@ class ApiService {
   // ignore: prefer_final_fields
   static Map<String, String>? _header = {
     'Content-Type': 'application/json',
-    'token': ''
+    'Authorization': ''
   };
 
   static EitherResponse postApi(String url, Map map,
@@ -17,7 +17,7 @@ class ApiService {
     print('map$map url $url');
     final uri = Uri.parse(url);
     if (userToken != null) {
-      _header!['token'] = userToken;
+      _header!['Authorization'] = userToken;
     }
     final body = jsonEncode(map);
     dynamic fetchedData;
@@ -44,7 +44,7 @@ class ApiService {
   static EitherResponse getApi(String url, [String? token]) async {
     final uri = Uri.parse(url);
     if (token != null) {
-      _header!['usertoken'] = token;
+      _header!['Authorization'] = token;
     }
     try {
       dynamic fetchedData;
@@ -65,7 +65,7 @@ class ApiService {
   static EitherResponse deleteApi(String url, [String? token]) async {
     final uri = Uri.parse(url);
     if (token != null) {
-      _header!['usertoken'] = token;
+      _header!['Authorization'] = token;
     }
     try {
       dynamic fetchedData;
@@ -85,7 +85,7 @@ class ApiService {
   static EitherResponse patch(String url, Map map, [String? userToken]) async {
     final uri = Uri.parse(url);
     if (userToken != null) {
-      _header!['usertoken'] = userToken;
+      _header!['Authorization'] = userToken;
     }
     final body = jsonEncode(map);
     dynamic fetchedData;

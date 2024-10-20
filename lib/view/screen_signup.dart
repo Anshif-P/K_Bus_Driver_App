@@ -6,6 +6,7 @@ import 'package:k_bus_driver/util/snack_bar/snack_bar.dart';
 import 'package:k_bus_driver/util/validation/validation.dart';
 import 'package:k_bus_driver/view/screen_home.dart';
 import 'package:k_bus_driver/view/screen_login.dart';
+import 'package:k_bus_driver/view/screen_parent.dart';
 import 'package:k_bus_driver/widgets/comman/button.dart';
 import 'package:k_bus_driver/widgets/comman/textfield.dart';
 
@@ -83,7 +84,7 @@ class ScreenSignUp extends StatelessWidget {
                               print('singup success');
                               Navigator.of(context)
                                   .pushReplacement(MaterialPageRoute(
-                                builder: (context) => const ScreenHome(),
+                                builder: (context) => ScreenParentNavigation(),
                               ));
                             } else if (state is SignupFailedState) {
                               isLoading = false;

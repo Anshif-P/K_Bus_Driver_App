@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:k_bus_driver/controller/add_bus_bloc/add_bus_bloc.dart';
 import 'package:k_bus_driver/controller/login_bloc/login_bloc.dart';
 import 'package:k_bus_driver/controller/signup_bloc/signup_bloc.dart';
 import 'package:k_bus_driver/controller/user_bloc/user_bloc.dart';
@@ -27,6 +28,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => UserBloc(),
+        ),
+        BlocProvider(
+          create: (context) => AddBusBloc(),
         )
       ],
       child: const MaterialApp(

@@ -9,13 +9,14 @@ class TextFieldWidget extends StatefulWidget {
   final bool textVisibility;
   final FormFieldValidator validator;
   bool isObscure = true;
-
+  bool isNumber;
   TextFieldWidget({
     super.key,
     required this.controller,
     required this.validator,
     this.isObscure = false,
     this.textVisibility = false,
+    this.isNumber = false,
   });
 
   @override
@@ -30,6 +31,8 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
         onEditingComplete: () {
           FocusScope.of(context).nextFocus();
         },
+        keyboardType:
+            widget.isNumber ? TextInputType.phone : TextInputType.text,
         validator: widget.validator,
         controller: widget.controller,
         obscureText: widget.isObscure,
