@@ -4,7 +4,9 @@ import 'package:k_bus_driver/util/typedef/type_def.dart';
 
 class AuthenticationRepo {
   EitherResponse singUpUser(map) async =>
-      ApiService.postApi(AppUrl().baseUrl + AppUrl().register, map);
+      ApiService.postApi(AppUrl.baseUrl + AppUrl.register, map);
   EitherResponse loginUser(map) async =>
-      ApiService.postApi(AppUrl().baseUrl + AppUrl().login, map);
+      ApiService.postApi(AppUrl.baseUrl + AppUrl.login, map);
+  EitherResponse forgorPassword(map) async =>
+      ApiService.postApi(AppUrl.baseUrl + AppUrl.forgorPassword, map);
 }

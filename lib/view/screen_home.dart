@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:k_bus_driver/network/shared_preferences/shared_pref_model.dart';
 import 'package:k_bus_driver/util/constance/text_style.dart';
 import 'package:k_bus_driver/view/screen_add_bus.dart';
+import 'package:k_bus_driver/view/screen_login.dart';
 import 'package:k_bus_driver/widgets/comman/button.dart';
 
 class ScreenHome extends StatelessWidget {
@@ -10,6 +12,17 @@ class ScreenHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: InkWell(
+            onTap: () {
+              SharedPrefModel.instance.removeData('token');
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(
+                  builder: (context) => ScreenLogin(),
+                ),
+                (route) => false,
+              );
+            },
+            child: Icon(Icons.logout)),
         centerTitle: true,
         title: Text(
           'Home',

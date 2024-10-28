@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_bus_driver/controller/add_bus_bloc/add_bus_bloc.dart';
+import 'package:k_bus_driver/controller/forgot_pass_bloc/forgot_password_bloc.dart';
 import 'package:k_bus_driver/controller/login_bloc/login_bloc.dart';
 import 'package:k_bus_driver/controller/signup_bloc/signup_bloc.dart';
 import 'package:k_bus_driver/controller/user_bloc/user_bloc.dart';
@@ -31,6 +32,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => AddBusBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ForgotPasswordBloc(),
         )
       ],
       child: const MaterialApp(

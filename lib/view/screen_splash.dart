@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_bus_driver/controller/user_bloc/user_bloc.dart';
 import 'package:k_bus_driver/util/constance/text_style.dart';
-import 'package:k_bus_driver/view/screen_home.dart';
 import 'package:k_bus_driver/view/screen_login.dart';
 import 'package:k_bus_driver/view/screen_parent.dart';
 

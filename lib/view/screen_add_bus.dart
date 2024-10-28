@@ -1,25 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:k_bus_driver/controller/add_bus_bloc/add_bus_bloc.dart';
 import 'package:k_bus_driver/util/constance/text_style.dart';
 import 'package:k_bus_driver/util/snack_bar/snack_bar.dart';
 import 'package:k_bus_driver/util/validation/validation.dart';
 import 'package:k_bus_driver/view/screen_add_routes.dart';
-import 'package:k_bus_driver/view/screen_login.dart';
 import 'package:k_bus_driver/widgets/comman/button.dart';
 import 'package:k_bus_driver/widgets/comman/textfield.dart';
 
 class ScreenAddBus extends StatelessWidget {
   ScreenAddBus({super.key});
-  TextEditingController busNameController = TextEditingController();
-  TextEditingController busNumberController = TextEditingController();
-  TextEditingController busColorController = TextEditingController();
-  TextEditingController busTypeController = TextEditingController();
-  TextEditingController ownerNameController = TextEditingController();
-  TextEditingController ownerPhoneController = TextEditingController();
-  TextEditingController assistentPhoneController = TextEditingController();
-  GlobalKey<FormState> addBusKey = GlobalKey<FormState>();
-  bool isLoading = false;
+
+  final TextEditingController busNameController = TextEditingController();
+  final TextEditingController busNumberController = TextEditingController();
+  final TextEditingController ownerNameController = TextEditingController();
+  final TextEditingController ownerPhoneController = TextEditingController();
+  final TextEditingController assistentPhoneController =
+      TextEditingController();
+  final GlobalKey<FormState> addBusKey = GlobalKey<FormState>();
+
+  final ValueNotifier<String?> selectedBusTypeNotifier = ValueNotifier(null);
+  final ValueNotifier<Color> selectedColorNotifier = ValueNotifier(Colors.blue);
+
+  final List<String> busTypes = [
+    'Super Fast',
+    'Limited Stop',
+    'Local',
+  ];
+  final ValueNotifier<bool> isLoadingNotifier = ValueNotifier(false);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +70,8 @@ class ScreenAddBus extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10),
                   child: TextFieldWidget(
                     controller: busNumberController,
-                    validator: (value) => Validations.emtyValidation(value),
+                    validator: (value) =>
+                        Validations.vehicleNumberValidation(value),
                   ),
                 ),
                 Text(
@@ -69,9 +80,24 @@ class ScreenAddBus extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: TextFieldWidget(
-                    controller: busColorController,
-                    validator: (value) => Validations.emtyValidation(value),
+                  child: ValueListenableBuilder<Color>(
+                    valueListenable: selectedColorNotifier,
+                    builder: (context, color, _) => GestureDetector(
+                      onTap: () => pickColor(context),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: color,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          'Pick a Color',
+                          style:
+                              AppText.mediumdark.copyWith(color: Colors.white),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
                 Text(
@@ -80,13 +106,32 @@ class ScreenAddBus extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: TextFieldWidget(
-                    controller: busTypeController,
-                    validator: (value) => Validations.emtyValidation(value),
+                  child: ValueListenableBuilder<String?>(
+                    valueListenable: selectedBusTypeNotifier,
+                    builder: (context, selectedBusType, _) =>
+                        DropdownButtonFormField<String>(
+                      value: selectedBusType,
+                      items: busTypes.map((String type) {
+                        return DropdownMenuItem<String>(
+                          value: type,
+                          child: Text(type),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        selectedBusTypeNotifier.value = newValue;
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                      validator: (value) =>
+                          value == null ? 'Please select a bus type' : null,
+                    ),
                   ),
                 ),
                 Text(
-                  'Bus OwnerName',
+                  'Bus Owner Name',
                   style: AppText.mediumdark,
                 ),
                 Padding(
@@ -97,7 +142,7 @@ class ScreenAddBus extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Owner Numer',
+                  'Owner Number',
                   style: AppText.mediumdark,
                 ),
                 Padding(
@@ -105,11 +150,11 @@ class ScreenAddBus extends StatelessWidget {
                   child: TextFieldWidget(
                     isNumber: true,
                     controller: ownerPhoneController,
-                    validator: (value) => Validations.emtyValidation(value),
+                    validator: (value) => Validations.numberValidation(value),
                   ),
                 ),
                 Text(
-                  'Assistent Number',
+                  'Assistant Number',
                   style: AppText.mediumdark,
                 ),
                 Padding(
@@ -117,7 +162,7 @@ class ScreenAddBus extends StatelessWidget {
                   child: TextFieldWidget(
                     isNumber: true,
                     controller: assistentPhoneController,
-                    validator: (value) => Validations.emtyValidation(value),
+                    validator: (value) => Validations.numberValidation(value),
                   ),
                 ),
                 const SizedBox(
@@ -126,23 +171,26 @@ class ScreenAddBus extends StatelessWidget {
                 BlocConsumer<AddBusBloc, AddBusState>(
                   listener: (context, state) {
                     if (state is AddBusDetailsSuccessState) {
-                      isLoading = false;
+                      isLoadingNotifier.value = false;
                       CustomSnackBar.showSnackBar(
-                          context, 'Bus Details Added Successfuly');
+                          context, 'Bus Details Added Successfully');
                       Navigator.of(context).pushReplacement(MaterialPageRoute(
                           builder: (context) => const ScreenAddRoutes()));
                     } else if (state is AddBusDetailsFailedState) {
-                      isLoading = false;
+                      isLoadingNotifier.value = false;
                       CustomSnackBar.showSnackBar(context, state.message);
                     } else if (state is AddBusLoadingState) {
-                      isLoading = true;
+                      isLoadingNotifier.value = true;
                     }
                   },
-                  builder: (context, state) => ButtonWidget(
-                      onpressFunction: () => addBusFnc(context),
-                      text: 'Add',
-                      loadingCheck: isLoading,
-                      colorCheck: true),
+                  builder: (context, state) => ValueListenableBuilder<bool>(
+                    valueListenable: isLoadingNotifier,
+                    builder: (context, isLoading, _) => ButtonWidget(
+                        onpressFunction: () => addBusFnc(context),
+                        text: 'Add',
+                        loadingCheck: isLoading,
+                        colorCheck: true),
+                  ),
                 ),
                 const SizedBox(
                   height: 20,
@@ -160,11 +208,36 @@ class ScreenAddBus extends StatelessWidget {
       context.read<AddBusBloc>().add(AddBusDetailsEvent(
           busName: busNameController.text,
           busNumber: busNumberController.text,
-          busColor: busColorController.text,
-          busType: busTypeController.text,
+          busColor: selectedColorNotifier.value.toString(),
+          busType: selectedBusTypeNotifier.value!,
           ownerName: ownerNameController.text,
           ownerPhone: ownerPhoneController.text,
           assistentPhon: assistentPhoneController.text));
     }
+  }
+
+  void pickColor(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Pick a color'),
+        content: SingleChildScrollView(
+          child: BlockPicker(
+            pickerColor: selectedColorNotifier.value,
+            onColorChanged: (color) {
+              selectedColorNotifier.value = color;
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            child: const Text('Close'),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

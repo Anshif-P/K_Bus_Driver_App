@@ -1,11 +1,15 @@
 class Validations {
-  static String? emailValidation(String? value) {
+  static String? emailOrNumberValidation(String? value) {
+    RegExp numberRegExp = RegExp(r'^\d+$');
     RegExp emailRegExp = RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$');
-    if (value == null || !emailRegExp.hasMatch(value)) {
-      return 'Enter a correct email address';
-    } else {
-      return null;
+
+    if (value == null || value.isEmpty) {
+      return 'Please enter an email or a phone number';
     }
+    if (!emailRegExp.hasMatch(value) && !numberRegExp.hasMatch(value)) {
+      return 'Enter a correct email address or phone number';
+    }
+    return null;
   }
 
   static String? isPassword(String? value) {
@@ -34,6 +38,17 @@ class Validations {
     } else {
       return null;
     }
+  }
+
+  static String? vehicleNumberValidation(String? value) {
+    RegExp vehicleRegExp = RegExp(r'^[A-Z]{2}\s\d{1,2}\s[A-Z]{0,2}\s?\d{4}$');
+
+    if (value == null || value.isEmpty) {
+      return 'Vehicle number is required';
+    } else if (!vehicleRegExp.hasMatch(value)) {
+      return 'Enter a valid vehicle number (e.g., KL 84 2046)';
+    }
+    return null;
   }
 
   static String? conformPasswordValidation(password, conPassword) {

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:k_bus_driver/network/shared_preferences/shared_pref_model.dart';
 import 'package:k_bus_driver/repositories/authentication_repo.dart';

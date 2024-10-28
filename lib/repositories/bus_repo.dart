@@ -4,5 +4,5 @@ import 'package:k_bus_driver/util/typedef/type_def.dart';
 
 class BusRepositories {
   EitherResponse addBusDetails(map, token) async =>
-      ApiService.postApi(AppUrl().baseUrl + AppUrl().addBusDetails, map, token);
+      ApiService.postApi(AppUrl.baseUrl + AppUrl.addBusDetails, map, token);
 }

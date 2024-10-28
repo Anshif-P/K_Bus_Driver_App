@@ -35,9 +35,8 @@ class ApiService {
       return Left(InternetException());
     } on http.ClientException {
       return Left(RequestTimeOutException());
-    } catch (e) {
-      print('socket__________________----------$e');
-      return Left(BadRequestException());
+    } on AppException catch (e) {
+      return Left(e);
     }
   }
 
@@ -57,8 +56,8 @@ class ApiService {
       return Left(InternetException());
     } on http.ClientException {
       return Left(RequestTimeOutException());
-    } catch (e) {
-      return Left(BadRequestException());
+    } on AppException catch (e) {
+      return Left(e);
     }
   }
 
@@ -77,8 +76,8 @@ class ApiService {
       return Left(InternetException());
     } on http.ClientException {
       return Left(RequestTimeOutException());
-    } catch (e) {
-      return Left(BadRequestException());
+    } on AppException catch (e) {
+      return Left(e);
     }
   }
 
@@ -99,19 +98,18 @@ class ApiService {
       return Left(InternetException());
     } on http.ClientException {
       return Left(RequestTimeOutException());
-    } catch (e) {
-      return Left(BadRequestException());
+    } on AppException catch (e) {
+      return Left(e);
     }
   }
 
   static _getResponse(http.Response response) {
-    switch (response.statusCode) {
-      case 200:
-        return (jsonDecode(response.body));
-      case 400:
-        return throw BadRequestException();
-      default:
-        throw BadRequestException();
+    final responseBody = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      return responseBody;
+    } else {
+      final errorMessage = responseBody['message'] ?? 'An error occurred';
+      throw BadRequestException(errorMessage);
     }
   }
 }

@@ -5,6 +5,7 @@ import 'package:k_bus_driver/controller/signup_bloc/signup_bloc.dart';
 import 'package:k_bus_driver/util/constance/text_style.dart';
 import 'package:k_bus_driver/util/snack_bar/snack_bar.dart';
 import 'package:k_bus_driver/util/validation/validation.dart';
+import 'package:k_bus_driver/view/screen_forgotpassword.dart';
 import 'package:k_bus_driver/view/screen_home.dart';
 import 'package:k_bus_driver/view/screen_parent.dart';
 import 'package:k_bus_driver/view/screen_signup.dart';
@@ -59,7 +60,7 @@ class ScreenLogin extends StatelessWidget {
                         TextFieldWidget(
                             controller: emailController,
                             validator: (value) =>
-                                Validations.emailValidation(value)),
+                                Validations.emailOrNumberValidation(value)),
                         const SizedBox(height: 10),
                         Text(
                           'Password',
@@ -74,6 +75,25 @@ class ScreenLogin extends StatelessWidget {
                             controller: passController,
                             validator: (value) =>
                                 Validations.isPassword(value)),
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) =>
+                                        ScreenForgorPassword()));
+                              },
+                              child: Text(
+                                'Forgot Password',
+                                style: AppText.mediumPrimary,
+                              ),
+                            ),
+                          ],
+                        ),
                         const SizedBox(height: 30),
                         BlocConsumer<LoginBloc, LoginState>(
                           listener: (context, state) {
@@ -96,7 +116,7 @@ class ScreenLogin extends StatelessWidget {
                           builder: (context, state) => ButtonWidget(
                               loadingCheck: isLoading,
                               onpressFunction: () => loginFnc(context),
-                              text: 'Sing up',
+                              text: 'Log In',
                               colorCheck: true),
                         ),
                       ],

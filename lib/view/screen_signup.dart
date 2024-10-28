@@ -57,7 +57,7 @@ class ScreenSignUp extends StatelessWidget {
                         TextFieldWidget(
                             controller: emailController,
                             validator: (value) =>
-                                Validations.emailValidation(value)),
+                                Validations.emailOrNumberValidation(value)),
                         const SizedBox(height: 10),
                         Text(
                           'Password',

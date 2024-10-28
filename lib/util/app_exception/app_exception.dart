@@ -12,5 +12,7 @@ class RequestTimeOutException extends AppException {
 }
 
 class BadRequestException extends AppException {
-  BadRequestException() : super('somthing went wrong');
+  BadRequestException(
+    super.message,
+  );
 }
